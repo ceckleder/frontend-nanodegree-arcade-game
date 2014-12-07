@@ -1,12 +1,19 @@
-
-// General helper methodes and global variables
+/**
+ * Helper function that returns a random number in a given range
+ * @param lowerBound
+ * @param upperBound
+ * @returns {integer} random number
+ */
 var randomNumber = function(lowerBound, upperBound) {
     return Math.floor(Math.random() * (upperBound - lowerBound + 1)) + lowerBound;
 }
 // Global gabe state variable
 var gameState = true;
 
-// Enemies our player must avoid
+/**
+ * Enemies our player must avoid
+ * @constructor
+ */
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -19,8 +26,10 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 }
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+ * Update the enemy's position, required method for game
+ * @param dt a time delta between ticks
+ */
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -32,7 +41,9 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + this.speed * dt;
 }
 
-// Draw the enemy on the screen, required method for game
+/**
+ * Draw the enemy on the screen, required method for game
+ */
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
@@ -47,11 +58,9 @@ var Player = function() {
     this.score = 0;
     this.sprite = 'images/char-cat-girl.png';
 }
-
-Player.prototype.update = function() {
-
-}
-
+/***
+ * Rendering method for the player, draws the player and the life-icons.
+ */
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     var heartX = canvas.width - 30;
@@ -62,11 +71,16 @@ Player.prototype.render = function() {
     }
 }
 
+/**
+ * Method to reduce the players lives
+ */
 Player.prototype.reduceLife = function() {
     this.lives -= 1;
     console.log(this.lives);
 }
-
+/**
+ * Method to reset the players lives and position
+ */
 Player.prototype.reset = function() {
     player.lives = 3;
     this.x = 2 * 101;
@@ -74,7 +88,10 @@ Player.prototype.reset = function() {
 
 }
 
-
+/**
+ * This method handles the users input and sets the new coordinates for the player
+ * @param direction
+ */
 Player.prototype.handleInput = function(direction) {
     switch (direction) {
         case 'left':
@@ -107,11 +124,9 @@ Player.prototype.handleInput = function(direction) {
     }
 }
 
-
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
 var allEnemies = [];
 for (i = 0; i < 2; i++) {
     var enemy = new Enemy();
@@ -121,10 +136,10 @@ for (i = 0; i < 2; i++) {
 var player = new Player();
 
 
-
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/**
+ * This listens for key presses and sends the keys to your
+ * Player.handleInput() method. You don't need to modify this.
+ */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',

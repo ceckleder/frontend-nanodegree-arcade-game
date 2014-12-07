@@ -23,6 +23,10 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
+    /**
+     * Main function, sets game parameters and calls the rendering function as long
+     * as the game-state is true.
+     */
     function main() {
         if (gameState == true) {
             var now = Date.now(),
@@ -32,20 +36,32 @@ var Engine = (function(global) {
             lastTime = now;
         }
         win.requestAnimationFrame(main);
-    };
+    }
 
+    /**
+     * Init function, is used to start the game.
+     */
     function init() {
         reset();
         lastTime = Date.now();
         main();
     }
 
+    /**
+     * Update function. Calls functions to update entities (player, enemy, etc), check for collisions,
+     * and to check for the background (water).
+     * @param dt
+     */
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
         checkBackground();
     }
 
+    /**
+     * Updates all enemies and the player.
+     * @param dt
+     */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
@@ -53,6 +69,9 @@ var Engine = (function(global) {
         player.update();
     }
 
+    /**
+     * Checks for collisions between enemies and player.
+     */
     function checkCollisions() {
         allEnemies.forEach(function(enemy) {
             if (enemy.x + 80 > player.x && enemy.x < (player.x + 101)) {
@@ -64,6 +83,9 @@ var Engine = (function(global) {
         });
     }
 
+    /**
+     * Checks if the player hit an unallowed tile (water).
+     */
     function checkBackground() {
         var playerRow = (player.y + 10) / 83,
         currentBackground = background[playerRow];
@@ -74,17 +96,23 @@ var Engine = (function(global) {
 
     }
 
+    /**
+     * This function checks the game state
+     * and sets the game-state variable accordingly
+     */
     function checkGameState() {
         if (player.lives > 0) {
             reset();
-        return;
         }
         else {
             gameState = false;
-            return;
         }
     }
 
+    /**
+     * Renders the background tiles and calls functions to render entities if the game is running
+     * or the split screen if the player lost.
+     */
     function render() {
             var numRows = 6,
             numCols = 5,
@@ -103,6 +131,9 @@ var Engine = (function(global) {
         }
     }
 
+    /**
+     * Function that renders the entities.
+     */
     function renderEntities() {
         allEnemies.forEach(function(enemy) {
             enemy.render();
@@ -110,6 +141,9 @@ var Engine = (function(global) {
         player.render();
     }
 
+    /**
+     * Function that renders the split screen.
+     */
     function renderSplitscreen() {
         ctx.beginPath();
         ctx.lineWidth = "4";
@@ -127,6 +161,9 @@ var Engine = (function(global) {
        }
     }
 
+    /**
+     * Function that resets the players coordinates and resets the enemies array.
+     */
     function reset() {
         player.x = 2 * 101;
         player.y = 5 * 83 - 10;
